@@ -14,10 +14,10 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "easy-bar": "^1.0.0",
+    "easy-bar": "^1.0.1",
     "iview": "^2.11.0",
     "vue": "^2.5.2",
-    "ybao-page-manager": "^1.0.1"
+    "ybao-page-manager": "^1.0.2"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
