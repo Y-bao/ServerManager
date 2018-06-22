@@ -1,6 +1,7 @@
 import Vue from "vue";
 import PMRouter from "ybao-page-manager";
 import * as Pages from "./pages.js";
+import LM from "../../helper/manager/login-manager";
 
 Vue.use(PMRouter);
 
@@ -18,6 +19,10 @@ const CPChridAnim = {
     closeLeave: "pm-sl-f-leave"
 };
 
+const LGChridAnim = {
+    openEnter: "pm-st-enter"
+};
+
 var router = new PMRouter({
     listenGuide: true,
     title: "服务管理系统",
@@ -28,52 +33,43 @@ var router = new PMRouter({
             redirect: "/ControlPanel"
         },
         {
+            name: "Login",
+            path: "/Login",
+            component: Pages.Login,
+            title: "登录",
+            pageAnimation: LGChridAnim
+        },
+        {
             name: "ControlPanel",
             path: "/ControlPanel",
             component: Pages.ControlPanel,
             children: [
                 {
                     path: "/ControlPanel",
-                    redirect: "/ControlPanel/SystemState"
+                    redirect: "/Brand"
                 },
                 {
-                    name: "SystemState",
-                    path: "/ControlPanel/SystemState",
-                    component: Pages.HostList,
-                    title: "服务器状态",
+                    name: "Brand",
+                    path: "/Brand",
+                    component: Pages.Brand,
+                    title: "品牌信息",
                     modelName: "Main",
                     pageAnimation: CPChridAnim
                 },
                 {
-                    name: "ApiList",
-                    path: "/ControlPanel/ApiList",
-                    component: Pages.ApiList,
-                    title: "接口服务管理",
-                    modelName: "System",
+                    name: "Users",
+                    path: "/Users",
+                    component: Pages.Users,
+                    title: "用户管理",
+                    modelName: "Main",
                     pageAnimation: CPChridAnim
                 },
                 {
-                    name: "ServiceList",
-                    path: "/ControlPanel/ServiceList",
-                    component: Pages.ServiceList,
-                    title: "系统服务管理",
-                    modelName: "System",
-                    pageAnimation: CPChridAnim
-                },
-                {
-                    name: "RedisGroupList",
-                    path: "/ControlPanel/RedisGroupList",
-                    component: Pages.RedisGroupList,
-                    title: "Redis管理",
-                    modelName: "System",
-                    pageAnimation: CPChridAnim
-                },
-                {
-                    name: "AlarmList",
-                    path: "/ControlPanel/AlarmList",
-                    component: Pages.AlarmList,
-                    title: "警报管理",
-                    modelName: "Alarm",
+                    name: "Draw",
+                    path: "/Draw",
+                    component: Pages.Draw,
+                    title: "抽签活动",
+                    modelName: "Sales",
                     pageAnimation: CPChridAnim
                 }
             ],
@@ -96,9 +92,14 @@ var router = new PMRouter({
     ]
 });
 
-router.beforeEach((a, b, n) => {
-    // alert(router.$pm.jumpWay);
-    n();
+router.beforeEach((to, from, n) => {
+    if (LM.isLogin||router.$pm.pages.Login.path == to.path ) {
+        n();
+    } else {
+        n({
+            path: router.$pm.pages.Login.path
+        });
+    }
 });
 
 export default router;

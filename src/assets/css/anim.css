@@ -28,7 +28,7 @@
 
 .pm-fade-enter-active,
 .pm-fade-leave-active {
-    transition: all 0.4s ease-in;
+    transition: all 0.3s ease-in;
 }
 /* none end */
 
@@ -82,4 +82,13 @@
 }
 /* slideLeft and fade end */
 
+.pm-st-enter,
+.pm-st-leave-to {
+    transform: translateY(-100%);
+}
+
+.pm-st-enter-active,
+.pm-st-leave-active {
+    transition: all 0.4s ease-out;
+}
 /* PageTransition end*/

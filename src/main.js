@@ -1,16 +1,26 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+
+
 import Vue from "vue";
 import App from "./App";
-import router from "./router";
-import "./config/iview-config.js";
-import EasyBar from "easy-bar";
+import router from "./plugins/router";
+import "./plugins/easy-bar";
+import "./plugins/iview";
 
 import "./assets/css/main.css";
 import "./assets/css/anim.css";
 import "./assets/css/over-iview.css";
+import "./assets/font/iconfont.css";
 
-Vue.use(EasyBar);
+import Promise from "bluebird";
+
+Promise.config({
+    warnings: false,
+    cancellation: true
+});
+
+window.Bus = new Vue();
 
 Vue.config.productionTip = false;
 /* eslint-disable no-new */

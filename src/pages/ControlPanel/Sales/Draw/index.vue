@@ -1,6 +1,6 @@
 <template>
     <div class="cev-layout" v-bar>
-        <div style="height: 2000px; background:#ff0;"></div>
+        <div style="height: 2000px; background:#0ff;"></div>
     </div>
 </template>
 
@@ -20,5 +20,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>
