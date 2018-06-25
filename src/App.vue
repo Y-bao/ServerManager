@@ -4,10 +4,10 @@
             <a class="main-logo">ServerManager</a>
             <template v-if="isLogin">
                 <div class="main-shortcut">
-                    <i class="btn iconfont icon-search"/>
-                    <input class="input" />
+                    <input ref="inputShortcut" @blur="change(false)" @focus="change(true)" :class="['input' ,{'focus':focus}]" />
+                    <i class="btn iconfont icon-search" @click="onSearch" />
                 </div>
-                <Menu ref="mainMenu" class="main-menu" mode="horizontal" :active-name="matchedPath" @on-select="onMenuSelect">
+                <Menu class="main-menu" mode="horizontal" :active-name="matchedPath" @on-select="onMenuSelect">
                     <MenuItem :name="$pm.pages.ControlPanel.path" class="main-menu-item">
                     <i class="iconfont icon-panel" /> 控制面板
                     </MenuItem>
@@ -21,12 +21,6 @@
                     <i class="iconfont icon-exit" /> 退出
                     </MenuItem>
                 </Menu>
-                <div :class="menuBtnClass" @click="openAndCloseMenu">
-                    <Icon type="navicon-round"></Icon>
-                </div>
-                <transition name="pm-fade">
-                    <div v-if="isOpenMenu" class="main-menu-bg" @touchstart.prevent="closeMenu" @mousedown.prevent="closeMenu"></div>
-                </transition>
             </template>
         </Header>
         <Content class="transition-box">
@@ -51,15 +45,12 @@ export default {
     },
     data() {
         return {
-            isOpenMenu: false,
-            tC: {}
+            tC: {},
+            focus: false
         };
     },
     computed: {
-        menuBtnClass: function() {
-            return ["main-menu-btn", this.isOpenMenu ? "main-menu-btn-open" : ""];
-        },
-        matchedPath: function() {
+        matchedPath: function () {
             return this.$route.matched[0] != null ? this.$route.matched[0].path : "";
         },
         isLogin() {
@@ -72,18 +63,23 @@ export default {
                 to,
                 from,
                 1,
-                function(e) {
+                function (e) {
                     this.tC = e;
                 }.bind(this)
             );
         }
     },
     methods: {
+        onSearch() {
+            this.$refs.inputShortcut.focus();
+        },
+        change(focus) {
+            this.focus = focus;
+        },
         onMenuSelect(name) {
             if (this.matchedPath == name) {
                 return;
             }
-            this.closeMenu();
             if (name == "Exit") {
                 LM.logout().then(() => {
                     this.$router.push(this.$pm.pages.Login.path);
@@ -91,164 +87,86 @@ export default {
                 return;
             }
             this.$router.replace(name);
-        },
-        openMenu() {
-            this.isOpenMenu = true;
-            var el = this.$refs.mainMenu.$el;
-            var startHeught = getComputedStyle(el).height;
-            el.style.setProperty("--max-height", "auto");
-            var endHeight = getComputedStyle(el).height;
-            el.style.setProperty("--max-height", startHeught);
-            this._menuHeight = el.offsetHeight;
-            el.style.setProperty("--max-height", endHeight);
-        },
-        closeMenu() {
-            this.isOpenMenu = false;
-            var el = this.$refs.mainMenu.$el;
-            el.style.setProperty("--max-height", "0px");
-        },
-        openAndCloseMenu() {
-            this.isOpenMenu ? this.closeMenu() : this.openMenu();
         }
     }
 };
 </script>
 
 <style scoped>
-.main-layout-header {
-    padding: 0, 0;
-    padding-left: 10px;
-    padding-right: 10px;
-    height: 60px;
-    line-height: 60px;
-    text-align: center;
-    z-index: 91;
-    background: #282c34;
-}
-
-.main-layout-footer {
-    border-top: solid 1px #cccccc;
-    padding: 2px 10px;
-    text-align: center;
-    z-index: 90;
-}
-
-.main-logo {
-    padding: 0, 0;
-    padding-left: 20px;
-    padding-right: 20px;
-    height: 40px;
-    line-height: 40px;
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-    border-radius: 3px;
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 16px;
-    float: left;
-}
-.main-shortcut {
-    display: inline-block;
-    box-sizing: border-box;
-    display: flex;
-    height: 40px;
-    line-height: 40px;
-    color: #fff;
-}
-.main-shortcut .input {
-    display: inline-block;
-    padding: 0 8px;
-    background: none;
-    border: none;
-    border-bottom: solid #fff 1px;
-    width: 200px;
-    color: #fff;
-}
-.main-menu {
-    height: 100%;
-    float: right;
-    margin-right: 20px;
-}
-.main-menu-btn {
-    text-align: center;
-    color: white;
-    font-size: 18px;
-    float: right;
-    display: none;
-    width: 50px;
-    height: 50px;
-}
-
-.main-menu-btn i {
-    transition: transform 0.4s;
-}
-
-.main-menu-btn-open {
-    background: rgba(255, 255, 255, 0.1);
-}
-
-.main-menu-btn-open i {
-    transform: rotate(90deg);
-}
-
-.main-menu-bg {
-    display: none;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    top: 50px;
-    position: fixed;
-    z-index: 91;
-}
-
-@media screen and (max-width: 768px) {
     .main-layout-header {
-        padding-left: 0px;
-        padding-right: 0px;
-        height: 50px;
-        line-height: 50px;
+        display: flex;
+        padding: 0, 0;
+        padding-left: 10px;
+        padding-right: 10px;
+        box-sizing: border-box;
+        height: 60px;
+        background: #282c34;
+        flex-direction: row;
+        align-items: center;
     }
+
+    .main-layout-footer {
+        border-top: solid 1px #cccccc;
+        padding: 2px 10px;
+        text-align: center;
+    }
+
     .main-logo {
         padding: 0, 0;
-        padding-left: 0px;
-        margin-left: 10px;
-        padding-right: 0px;
-        background: none;
+        padding-left: 20px;
+        padding-right: 20px;
+        height: 40px;
+        line-height: 40px;
+        background: rgba(255, 255, 255, 0.2);
         color: white;
         border-radius: 3px;
-        position: relative;
-        top: 50%;
-        transform: translateY(-50%);
         font-size: 16px;
-        float: left;
     }
-    .main-menu-btn {
-        display: block;
+    .main-shortcut {
+        margin-left: 30px;
+        display: flex;
+        align-items: center;
+        flex: 1 0;
+        height: 40px;
+        line-height: 40px;
+        color: #fff;
+    }
+    .main-shortcut .input {
+        background: none;
+        border: none;
+        border-bottom: solid #fff 1px;
+        height: 30px;
+        color: #fff;
+        font-size: 18px;
+        width: 0;
+        padding: 0;
+        transition: width 300ms;
+    }
+    .main-shortcut .input.focus {
+        width: 200px;
+        padding: 0 8px;
+        margin-right: 10px;
+    }
+    .main-shortcut .btn {
+        cursor: pointer;
+        font-size: 18px;
     }
     .main-menu {
-        --max-height: 0px;
-        overflow: hidden;
-        top: 50px;
-        position: fixed;
-        width: 100%;
-        height: auto;
-        max-height: var(--max-height);
-        display: block;
-        background: #282c34;
-        transition: max-height 0.4s;
-        z-index: 92;
+        height: 100%;
+        margin-left: 30px;
+        margin-right: 20px;
+    }
+    .main-menu-btn {
+        text-align: center;
+        color: white;
+        font-size: 18px;
+        float: right;
+        display: none;
+        width: 50px;
+        height: 50px;
     }
 
-    .main-menu .main-menu-item {
-        width: 100%;
-        height: 50px;
-        line-height: 50px;
-        text-align: left;
-        display: block;
+    .main-menu-btn i {
+        transition: transform 0.4s;
     }
-    .main-menu-bg {
-        display: block;
-    }
-}
 </style>

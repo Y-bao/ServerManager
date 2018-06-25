@@ -68,6 +68,11 @@ export default {
                     icon: "icon-users"
                 },
                 {
+                    name: "访客统计",
+                    path: $pm.pages.Visit.path,
+                    icon: "icon-users"
+                },
+                {
                     name: "营销模块",
                     modelName: $pm.pages.Draw.modelName,
                     icon: "icon-sales",

@@ -65,6 +65,14 @@ var router = new PMRouter({
                     pageAnimation: CPChridAnim
                 },
                 {
+                    name: "Visit",
+                    path: "/Visit",
+                    component: Pages.Visit,
+                    title: "访客统计",
+                    modelName: "Main",
+                    pageAnimation: CPChridAnim
+                },
+                {
                     name: "Draw",
                     path: "/Draw",
                     component: Pages.Draw,
