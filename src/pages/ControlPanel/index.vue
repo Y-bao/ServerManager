@@ -1,20 +1,20 @@
 <template>
     <Layout class="cev-layout">
         <transition name="pm-slide-left">
-            <Sider id="sider" v-show="isShow" :class="{'sider-open':isOpenSider,'sider-hover':isEnterSider}">
+            <Sider id="sider" v-show="isShow" :class="{'sider-hover':isEnterSider}">
                 <div id="sider-menu-box" v-bar="{preventParentScroll: true}" @mouseenter="enterSider" @mouseleave="leaveSider">
-                    <Menu theme="light" width="200px" :open-names="matchedModel" :active-name="matchedPath" accordion @on-select="onMenuSelect">
+                    <Menu theme="light" width="200px" :open-names="matchedModel" :active-name="matchedRoute" accordion @on-select="onMenuSelect">
                         <template v-for="item in menuList">
-                            <Submenu v-if="item.childs" :name="item.modelName" :key="item.path">
+                            <Submenu v-if="item.childs" :name="item.modelName||''" :key="item.name">
                                 <template slot="title">
-                                    <i :class="['icon' ,'iconfont', item.icon]" />{{ item.name }}
+                                    <i :class="['icon' ,'iconfont', item.icon]" />{{ item.title }}
                                 </template>
-                                <MenuItem v-for="sitem in item.childs" :name="sitem.path" :key="sitem.path">
-                                <i :class="['icon' ,'iconfont', sitem.icon]" />{{ sitem.name }}
+                                <MenuItem v-for="sitem in item.childs" :name="sitem.name" :key="sitem.name">
+                                <i :class="['icon' ,'iconfont', sitem.icon]" />{{ sitem.title }}
                                 </MenuItem>
                             </Submenu>
-                            <MenuItem v-else :name="item.path" :key="item.path">
-                            <i :class="['icon' ,'iconfont', item.icon]" :key="item.path" />{{ item.name }}
+                            <MenuItem v-else :name="item.name" :key="item.name">
+                            <i :class="['icon' ,'iconfont', item.icon]" :key="item.name" />{{ item.title }}
                             </MenuItem>
                         </template>
                     </Menu>
@@ -26,12 +26,6 @@
                 <transition :enter-class="tC.enter" :enter-active-class="tC.enterActive" :enter-to-class="tC.enterTo" :leave-class="tC.leave" :leave-active-class="tC.leaveActive" :leave-to-class="tC.leaveTo">
                     <router-view class="transition-view"></router-view>
                 </transition>
-                <transition name="pm-fade">
-                    <div id="sider-bg" v-if="isOpenSider" @touchstart.prevent="closeSider" @mousedown.prevent="closeSider"></div>
-                </transition>
-                <div id="sider-btn" :class="{'sider-btn-open':isOpenSider}" @click="openSider">
-                    <Icon type="navicon-round"></Icon>
-                </div>
             </Content>
         </transition>
     </Layout>
@@ -41,7 +35,6 @@
 var chridPath;
 import { Card, Breadcrumb, BreadcrumbItem } from "iview";
 import Promise from "bluebird";
-
 export default {
     name: "ControlPanel",
     components: {
@@ -53,33 +46,30 @@ export default {
         return {
             tC: {},
             isShow: false,
-            chridPath: null,
-            isOpenSider: false,
             isEnterSider: false,
             menuList: [
                 {
-                    name: "品牌信息",
-                    path: $pm.pages.Brand.path,
+                    title: "品牌信息",
+                    name: $pm.pages.Brand.name,
                     icon: "icon-brand"
                 },
                 {
-                    name: "用户管理",
-                    path: $pm.pages.Users.path,
+                    title: "用户管理",
+                    name: $pm.pages.Users.name,
                     icon: "icon-users"
                 },
                 {
-                    name: "访客统计",
-                    path: $pm.pages.Visit.path,
-                    icon: "icon-users"
+                    title: "访客统计",
+                    name: $pm.pages.Visit.name,
+                    icon: "icon-visitlog"
                 },
                 {
-                    name: "营销模块",
-                    modelName: $pm.pages.Draw.modelName,
+                    title: "营销模块",
                     icon: "icon-sales",
                     childs: [
                         {
-                            name: "抽签活动",
-                            path: $pm.pages.Draw.path,
+                            title: "抽签活动",
+                            name: $pm.pages.Draw.name,
                             icon: "icon-draw"
                         }
                     ]
@@ -92,8 +82,8 @@ export default {
             var page = this.$router.$pm.getPage(this.$route, 2);
             return page && page.modelName ? [page.modelName] : [];
         },
-        matchedPath: function() {
-            return this.$route.matched.length > 1 ? this.$route.matched[1].path : "";
+        matchedRoute: function() {
+            return this.$route.matched.length > 1 ? this.$route.matched[1].name : "";
         }
     },
     watch: {
@@ -109,11 +99,11 @@ export default {
         }
     },
     beforeRouteEnter: (to, from, next) => {
-        $pm.getPage(to, 1).overridePageAnimation({
-            openEnter: { name: "pm-none-enter", active: "t-bottom" },
-            openLeave: { name: "pm-fade-leave", active: "t-top" }
-        });
-        if (!chridPath || chridPath == to.path) {
+        // router.$pm.getPage(to, 1).overridePageAnimation({
+        //     openEnter: { name: "pm-none-enter", active: "t-bottom" },
+        //     openLeave: { name: "pm-fade-leave", active: "t-top" }
+        // });
+        if (!chridPath || chridPath == to.name) {
             next();
         } else {
             next({
@@ -146,7 +136,6 @@ export default {
     },
     methods: {
         onMenuSelect(path) {
-            this.closeSider();
             chridPath = path;
             this.$router.replace(path);
         },
@@ -163,12 +152,6 @@ export default {
             this.lsp = Promise.delay(200).then(() => {
                 this.isEnterSider = false;
             });
-        },
-        openSider() {
-            this.isOpenSider = true;
-        },
-        closeSider() {
-            this.isOpenSider = false;
         }
     }
 };
@@ -205,79 +188,16 @@ export default {
     display: inline-block;
 }
 
-#sider-btn {
-    width: 40px;
-    height: 40px;
-    background: rgba(91, 98, 112, 0.6);
-    text-align: center;
-    line-height: 40px;
-    color: white;
-    font-size: 18px;
-    border-radius: 3px;
-    display: none;
-}
-
-#sider-btn i {
-    transition: transform 0.4s;
-    transform: rotate(-90deg);
-}
-
-#sider-btn.sider-btn-open i {
-    transform: rotate(0deg);
-}
-
-#sider-bg {
-    display: none;
-    background: rgba(0, 0, 0, 0.5);
-}
-
 #sider .ivu-menu .ivu-menu-submenu .ivu-menu-item {
     padding-left: 0px !important;
     transition: background, color, padding-left 0.4s, 0.4s, 0.4s;
 }
 
-@media screen and (min-width: 769px) {
-    #sider.sider-hover {
-        width: 200px !important;
-    }
-
-    #sider.sider-hover .ivu-menu .ivu-menu-submenu .ivu-menu-item {
-        padding-left: 16px !important;
-    }
+#sider.sider-hover {
+    width: 200px !important;
 }
-@media screen and (max-width: 768px) {
-    #sider {
-        width: 0px !important;
-    }
 
-    #sider.sider-open {
-        width: 200px !important;
-    }
-
-    #sider .ivu-menu .ivu-menu-submenu .ivu-menu-item {
-        padding-left: 16px !important;
-    }
-
-    #control-panel-cav-box {
-        position: relative;
-        width: 100%;
-        flex: none;
-    }
-
-    #sider-btn {
-        z-index: 3;
-        bottom: 10px;
-        left: 10px;
-        position: absolute;
-        display: block;
-    }
-
-    #sider-bg {
-        display: block;
-        width: 100%;
-        height: 100%;
-        position: fixed;
-        z-index: 9;
-    }
+#sider.sider-hover .ivu-menu .ivu-menu-submenu .ivu-menu-item {
+    padding-left: 16px !important;
 }
 </style>

@@ -28,7 +28,7 @@ export default {
     methods: {
         login() {
             LM.login().then(() => {
-                this.$router.push("/");
+                this.$router.push("ControlPanel");
             });
         }
     }

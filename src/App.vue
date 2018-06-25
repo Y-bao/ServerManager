@@ -1,20 +1,17 @@
 <template>
     <Layout class="cev-layout">
         <Header class="main-layout-header">
-            <a class="main-logo">ServerManager</a>
+            <a class="main-logo">INNOVATION</a>
             <template v-if="isLogin">
                 <div class="main-shortcut">
                     <input ref="inputShortcut" @blur="change(false)" @focus="change(true)" :class="['input' ,{'focus':focus}]" />
                     <i class="btn iconfont icon-search" @click="onSearch" />
                 </div>
-                <Menu class="main-menu" mode="horizontal" :active-name="matchedPath" @on-select="onMenuSelect">
-                    <MenuItem :name="$pm.pages.ControlPanel.path" class="main-menu-item">
+                <Menu class="main-menu" mode="horizontal" :active-name="matchedRoute" @on-select="onMenuSelect">
+                    <MenuItem :name="$pm.pages.ControlPanel.name" class="main-menu-item">
                     <i class="iconfont icon-panel" /> 控制面板
                     </MenuItem>
-                    <MenuItem :name="$pm.pages.Settings.path" class="main-menu-item">
-                    <i class="iconfont icon-settings" /> 设置
-                    </MenuItem>
-                    <MenuItem :name="$pm.pages.About.path" class="main-menu-item">
+                    <MenuItem :name="$pm.pages.About.name" class="main-menu-item">
                     <i class="iconfont icon-about" /> 关于
                     </MenuItem>
                     <MenuItem name="Exit" class="main-menu-item">
@@ -50,8 +47,8 @@ export default {
         };
     },
     computed: {
-        matchedPath: function () {
-            return this.$route.matched[0] != null ? this.$route.matched[0].path : "";
+        matchedRoute: function () {
+            return this.$route.matched[0] != null ? this.$route.matched[0].name : "";
         },
         isLogin() {
             return LM.isLogin;
@@ -137,7 +134,7 @@ export default {
         border-bottom: solid #fff 1px;
         height: 30px;
         color: #fff;
-        font-size: 18px;
+        font-size: 14px;
         width: 0;
         padding: 0;
         transition: width 300ms;

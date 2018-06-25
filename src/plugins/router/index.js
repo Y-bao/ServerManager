@@ -2,6 +2,7 @@ import Vue from "vue";
 import PMRouter from "ybao-page-manager";
 import * as Pages from "./pages.js";
 import LM from "../../helper/manager/login-manager";
+import Modules from "../../models/model-config";
 
 Vue.use(PMRouter);
 
@@ -22,10 +23,9 @@ const CPChridAnim = {
 const LGChridAnim = {
     openEnter: "pm-st-enter"
 };
-
 var router = new PMRouter({
     listenGuide: true,
-    title: "服务管理系统",
+    title: "INNOVATION",
     pageAnimation: AppAnim,
     routes: [
         {
@@ -34,78 +34,38 @@ var router = new PMRouter({
         },
         {
             name: "Login",
-            path: "/Login",
+            path: "/login",
             component: Pages.Login,
             title: "登录",
             pageAnimation: LGChridAnim
         },
         {
             name: "ControlPanel",
-            path: "/ControlPanel",
+            path: "/controlpanel",
             component: Pages.ControlPanel,
             children: [
                 {
                     path: "/ControlPanel",
-                    redirect: "/Brand"
+                    redirect: Modules.routes[0].path
                 },
-                {
-                    name: "Brand",
-                    path: "/Brand",
-                    component: Pages.Brand,
-                    title: "品牌信息",
-                    modelName: "Main",
-                    pageAnimation: CPChridAnim
-                },
-                {
-                    name: "Users",
-                    path: "/Users",
-                    component: Pages.Users,
-                    title: "用户管理",
-                    modelName: "Main",
-                    pageAnimation: CPChridAnim
-                },
-                {
-                    name: "Visit",
-                    path: "/Visit",
-                    component: Pages.Visit,
-                    title: "访客统计",
-                    modelName: "Main",
-                    pageAnimation: CPChridAnim
-                },
-                {
-                    name: "Draw",
-                    path: "/Draw",
-                    component: Pages.Draw,
-                    title: "抽签活动",
-                    modelName: "Sales",
-                    pageAnimation: CPChridAnim
-                }
-            ],
-            modelName: "Main"
-        },
-        {
-            name: "Settings",
-            path: "/Settings",
-            component: Pages.Settings,
-            title: "设置",
-            modelName: "UtilsMenu"
+                ...Modules.routes
+            ]
         },
         {
             name: "About",
-            path: "/About",
+            path: "/about",
             component: Pages.About,
-            title: "关于",
-            modelName: "UtilsMenu"
+            title: "关于"
         }
     ]
 });
 
 router.beforeEach((to, from, n) => {
-    if (LM.isLogin||router.$pm.pages.Login.path == to.path ) {
+    if (LM.isLogin||router.$pm.pages.Login.name == to.name ) {
         n();
     } else {
         n({
-            path: router.$pm.pages.Login.path
+            path: router.$pm.pages.Login.name
         });
     }
 });
