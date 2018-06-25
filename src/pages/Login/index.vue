@@ -25,10 +25,21 @@ export default {
     data() {
         return {};
     },
+    beforeRouteEnter: (to, from, next) => {
+        $pm.overridePageAnimation({
+            openEnter: { name: "pm-st-enter", active: "t-top" },
+            openLeave: { name: "pm-fade-leave", active: "t-bottom" }
+        });
+        next();
+    },
     methods: {
         login() {
             LM.login().then(() => {
-                this.$router.push("ControlPanel");
+                $pm.overridePageAnimation({
+                    openEnter: { name: "pm-none-enter", active: "t-bottom" },
+                    openLeave: { name: "pm-st-leave", active: "t-top" }
+                });
+                this.$router.push("/");
             });
         }
     }
@@ -36,29 +47,29 @@ export default {
 </script>
 
 <style scoped>
-.login-layout {
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding-bottom: 200px;
-}
-.login-title {
-    font-size: 60px;
-}
-.login-card {
-    margin-top: 40px;
-}
-.login-box {
-    padding: 10px 30px;
-    box-sizing: content-box;
-    width: 300px;
-    background: none;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-.login-box > * {
-    margin-top: 10px;
-    width: 100%;
-}
+    .login-layout {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding-bottom: 200px;
+    }
+    .login-title {
+        font-size: 60px;
+    }
+    .login-card {
+        margin-top: 40px;
+    }
+    .login-box {
+        padding: 10px 30px;
+        box-sizing: content-box;
+        width: 300px;
+        background: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .login-box > * {
+        margin-top: 10px;
+        width: 100%;
+    }
 </style>

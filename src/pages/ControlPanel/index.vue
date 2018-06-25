@@ -5,15 +5,15 @@
                 <div id="sider-menu-box" v-bar="{preventParentScroll: true}" @mouseenter="enterSider" @mouseleave="leaveSider">
                     <Menu theme="light" width="200px" :open-names="matchedModel" :active-name="matchedRoute" accordion @on-select="onMenuSelect">
                         <template v-for="item in menuList">
-                            <Submenu v-if="item.childs" :name="item.modelName||''" :key="item.name">
+                            <Submenu v-if="item.isGroup" :name="item.name" :key="item.name">
                                 <template slot="title">
                                     <i :class="['icon' ,'iconfont', item.icon]" />{{ item.title }}
                                 </template>
-                                <MenuItem v-for="sitem in item.childs" :name="sitem.name" :key="sitem.name">
+                                <MenuItem v-for="sitem in item.childs" :name="sitem.to" :key="sitem.name">
                                 <i :class="['icon' ,'iconfont', sitem.icon]" />{{ sitem.title }}
                                 </MenuItem>
                             </Submenu>
-                            <MenuItem v-else :name="item.name" :key="item.name">
+                            <MenuItem v-else :name="item.to" :key="item.name">
                             <i :class="['icon' ,'iconfont', item.icon]" :key="item.name" />{{ item.title }}
                             </MenuItem>
                         </template>
@@ -32,9 +32,12 @@
 </template>
 
 <script>
-var chridPath;
+let chridRoute;
 import { Card, Breadcrumb, BreadcrumbItem } from "iview";
 import Promise from "bluebird";
+import Models from "../../models/model-config";
+
+
 export default {
     name: "ControlPanel",
     components: {
@@ -46,68 +49,43 @@ export default {
         return {
             tC: {},
             isShow: false,
-            isEnterSider: false,
-            menuList: [
-                {
-                    title: "品牌信息",
-                    name: $pm.pages.Brand.name,
-                    icon: "icon-brand"
-                },
-                {
-                    title: "用户管理",
-                    name: $pm.pages.Users.name,
-                    icon: "icon-users"
-                },
-                {
-                    title: "访客统计",
-                    name: $pm.pages.Visit.name,
-                    icon: "icon-visitlog"
-                },
-                {
-                    title: "营销模块",
-                    icon: "icon-sales",
-                    childs: [
-                        {
-                            title: "抽签活动",
-                            name: $pm.pages.Draw.name,
-                            icon: "icon-draw"
-                        }
-                    ]
-                }
-            ]
+            isEnterSider: false
         };
     },
     computed: {
-        matchedModel: function() {
-            var page = this.$router.$pm.getPage(this.$route, 2);
-            return page && page.modelName ? [page.modelName] : [];
+        matchedModel: function () {
+            return this.$route.meta.menuGroup ? [this.$route.meta.menuGroup] : [];
         },
-        matchedRoute: function() {
-            return this.$route.matched.length > 1 ? this.$route.matched[1].name : "";
+        matchedRoute: function () {
+            return this.$route.meta.menu || "";
+        },
+        menuList: function () {
+            return Models.panelMenus;
         }
     },
     watch: {
         $route(to, from) {
+            chridRoute = to.name;
             this.$pm.setTransitionClass(
                 to,
                 from,
                 2,
-                function(e) {
+                function (e) {
                     this.tC = e;
                 }.bind(this)
             );
         }
     },
     beforeRouteEnter: (to, from, next) => {
-        // router.$pm.getPage(to, 1).overridePageAnimation({
+        // $pm.overridePageAnimation({
         //     openEnter: { name: "pm-none-enter", active: "t-bottom" },
         //     openLeave: { name: "pm-fade-leave", active: "t-top" }
         // });
-        if (!chridPath || chridPath == to.name) {
+        if (!chridRoute || chridRoute == to.name) {
             next();
         } else {
             next({
-                path: chridPath,
+                path: chridRoute,
                 query: {
                     _isReplace: true
                 }
@@ -135,9 +113,8 @@ export default {
         }
     },
     methods: {
-        onMenuSelect(path) {
-            chridPath = path;
-            this.$router.replace(path);
+        onMenuSelect(name) {
+            this.$router.replace(name);
         },
         enterSider() {
             if (this.lsp && this.lsp.isPending()) {
@@ -158,46 +135,46 @@ export default {
 </script>
 
 <style scoped>
-#sider {
-    min-height: 0;
-    height: auto;
-    overflow-x: hidden;
-    width: 50px !important;
-    min-width: 0px !important;
-    max-width: 200px !important;
-    flex: none !important;
-    transition: all 0.4s;
-    background: #282c34;
-}
+    #sider {
+        min-height: 0;
+        height: auto;
+        overflow-x: hidden;
+        width: 50px !important;
+        min-width: 0px !important;
+        max-width: 200px !important;
+        flex: none !important;
+        transition: all 0.4s;
+        background: #282c34;
+    }
 
-#sider-menu-box {
-    width: 200px;
-    height: 100%;
-}
+    #sider-menu-box {
+        width: 200px;
+        height: 100%;
+    }
 
-#sider-menu-box .ivu-menu {
-    width: 100%;
-}
+    #sider-menu-box .ivu-menu {
+        width: 100%;
+    }
 
-#sider-menu-box .ivu-menu .icon {
-    text-align: center;
-    width: 50px;
-    height: 50px;
-    font-size: 18px;
-    margin-right: 0px;
-    display: inline-block;
-}
+    #sider-menu-box .ivu-menu .icon {
+        text-align: center;
+        width: 50px;
+        height: 50px;
+        font-size: 18px;
+        margin-right: 0px;
+        display: inline-block;
+    }
 
-#sider .ivu-menu .ivu-menu-submenu .ivu-menu-item {
-    padding-left: 0px !important;
-    transition: background, color, padding-left 0.4s, 0.4s, 0.4s;
-}
+    #sider .ivu-menu .ivu-menu-submenu .ivu-menu-item {
+        padding-left: 0px !important;
+        transition: background, color, padding-left 0.4s, 0.4s, 0.4s;
+    }
 
-#sider.sider-hover {
-    width: 200px !important;
-}
+    #sider.sider-hover {
+        width: 200px !important;
+    }
 
-#sider.sider-hover .ivu-menu .ivu-menu-submenu .ivu-menu-item {
-    padding-left: 16px !important;
-}
+    #sider.sider-hover .ivu-menu .ivu-menu-submenu .ivu-menu-item {
+        padding-left: 16px !important;
+    }
 </style>

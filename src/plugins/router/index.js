@@ -1,32 +1,34 @@
 import Vue from "vue";
-import PMRouter from "ybao-page-manager";
+import PMRouter from "./pm/page-manager";
 import * as Pages from "./pages.js";
 import LM from "../../helper/manager/login-manager";
 import Modules from "../../models/model-config";
 
 Vue.use(PMRouter);
 
-const AppAnim = {
-    openEnter: "pm-fade-enter",
-    openLeave: "pm-fade-leave",
-    closeEnter: "pm-fade-enter",
-    closeLeave: "pm-fade-leave"
+const MainAnim = {
+    openEnter: { name: "pm-fade-enter", active: "t-top" },
+    openLeave: { name: "pm-fade-leave", active: "t-bottom" },
+    closeEnter: { name: "pm-fade-enter", active: "t-top" },
+    closeLeave: { name: "pm-fade-leave", active: "t-bottom" }
 };
 
 const CPChridAnim = {
-    openEnter: "pm-sl-f-enter",
-    openLeave: "pm-sl-f-leave",
-    closeEnter: "pm-sl-f-enter",
-    closeLeave: "pm-sl-f-leave"
+    openEnter: { name: "pm-sl-f-enter", active: "t-top" },
+    openLeave: { name: "pm-sl-f-leave", active: "t-bottom" },
+    closeEnter: { name: "pm-sl-f-enter", active: "t-top" },
+    closeLeave: { name: "pm-sl-f-leave", active: "t-bottom" }
 };
-
-const LGChridAnim = {
-    openEnter: "pm-st-enter"
+const PChridAnim = {
+    openEnter: "pm-none-enter",
+    openLeave: { name: "pm-fade-leave", active: "t-bottom" },
+    closeEnter: "pm-none-enter",
+    closeLeave: { name: "pm-fade-leave", active: "t-bottom" }
 };
 var router = new PMRouter({
     listenGuide: true,
     title: "INNOVATION",
-    pageAnimation: AppAnim,
+    pageAnimation: CPChridAnim,
     routes: [
         {
             path: "/",
@@ -36,8 +38,7 @@ var router = new PMRouter({
             name: "Login",
             path: "/login",
             component: Pages.Login,
-            title: "登录",
-            pageAnimation: LGChridAnim
+            title: "登录"
         },
         {
             name: "ControlPanel",
@@ -49,19 +50,21 @@ var router = new PMRouter({
                     redirect: Modules.routes[0].path
                 },
                 ...Modules.routes
-            ]
+            ],
+            pageAnimation: PChridAnim
         },
         {
             name: "About",
             path: "/about",
             component: Pages.About,
-            title: "关于"
+            title: "关于",
+            pageAnimation: MainAnim
         }
     ]
 });
 
 router.beforeEach((to, from, n) => {
-    if (LM.isLogin||router.$pm.pages.Login.name == to.name ) {
+    if (LM.isLogin || router.$pm.pages.Login.name == to.name) {
         n();
     } else {
         n({

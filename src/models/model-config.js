@@ -14,5 +14,5 @@ moduleManager
     .addModule(visit)
     .addModule(sales)
     .addModule(draw);
-
+console.log(moduleManager.panelMenus);
 export default moduleManager;

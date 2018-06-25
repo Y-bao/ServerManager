@@ -9,11 +9,14 @@
     top: 0;
     width: 100%;
 }
+.t-t {
+    z-index: 3;
+}
 .t-top {
-    z-index: 1;
+    z-index: 2;
 }
 .t-bottom {
-    z-index: 0;
+    z-index: 1;
 }
 /* PageTransition start*/
 

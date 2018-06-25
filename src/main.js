@@ -16,6 +16,7 @@ Promise.config({
     cancellation: true
 });
 window.Bus = new Vue();
+window.$pm = router.$pm;
 
 Vue.config.productionTip = false;
 /* eslint-disable no-new */
