@@ -1,5 +1,5 @@
 <template>
-    <Layout class="cev-layout">
+    <Layout class="layout">
         <Header class="main-layout-header">
             <a class="main-logo">INNOVATION</a>
             <template v-if="isLogin">
@@ -32,14 +32,9 @@
 </template>
 
 <script>
-import { Button, Input } from "iview";
 import LM from "./helper/manager/login-manager";
 export default {
     name: "App",
-    components: {
-        Button,
-        Input
-    },
     data() {
         return {
             tC: {},

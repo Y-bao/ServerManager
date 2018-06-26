@@ -11,17 +11,9 @@
     </Layout>
 </template>
 <script>
-import { Card, Breadcrumb, BreadcrumbItem, Button, Input } from "iview";
 import LM from "../../helper/manager/login-manager";
 export default {
     name: "Login",
-    components: {
-        Card,
-        Breadcrumb,
-        BreadcrumbItem,
-        Button,
-        Input
-    },
     data() {
         return {};
     },

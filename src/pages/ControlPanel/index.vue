@@ -1,7 +1,7 @@
 <template>
-    <Layout class="cev-layout">
+    <div class="cp layout">
         <transition name="pm-slide-left">
-            <Sider id="sider" v-show="isShow" :class="{'sider-hover':isEnterSider}">
+            <div id="sider" v-show="isShow" :class="{'sider-hover':isEnterSider}">
                 <div id="sider-menu-box" v-bar="{preventParentScroll: true}" @mouseenter="enterSider" @mouseleave="leaveSider">
                     <Menu theme="light" width="200px" :open-names="matchedModel" :active-name="matchedRoute" accordion @on-select="onMenuSelect">
                         <template v-for="item in menuList">
@@ -19,32 +19,26 @@
                         </template>
                     </Menu>
                 </div>
-            </Sider>
+            </div>
         </transition>
         <transition name="pm-fade">
-            <Content id="control-panel-cav-box" v-show="isShow" class="transition-box">
+            <div id="control-panel-cav-box" v-show="isShow" class="transition-box">
                 <transition :enter-class="tC.enter" :enter-active-class="tC.enterActive" :enter-to-class="tC.enterTo" :leave-class="tC.leave" :leave-active-class="tC.leaveActive" :leave-to-class="tC.leaveTo">
                     <router-view class="transition-view"></router-view>
                 </transition>
-            </Content>
+            </div>
         </transition>
-    </Layout>
+    </div>
 </template>
 
 <script>
 let chridRoute;
-import { Card, Breadcrumb, BreadcrumbItem } from "iview";
 import Promise from "bluebird";
 import Models from "../../models/model-config";
 
 
 export default {
     name: "ControlPanel",
-    components: {
-        Card,
-        Breadcrumb,
-        BreadcrumbItem
-    },
     data() {
         return {
             tC: {},
@@ -135,9 +129,16 @@ export default {
 </script>
 
 <style scoped>
+    .cp.layout {
+        position: relative;
+        padding-left: 50px;
+    }
     #sider {
+        top: 0;
+        left: 0;
+        position: absolute;
+        height: 100%;
         min-height: 0;
-        height: auto;
         overflow-x: hidden;
         width: 50px !important;
         min-width: 0px !important;
@@ -145,6 +146,7 @@ export default {
         flex: none !important;
         transition: all 0.4s;
         background: #282c34;
+        z-index: 100;
     }
 
     #sider-menu-box {
@@ -176,5 +178,9 @@ export default {
 
     #sider.sider-hover .ivu-menu .ivu-menu-submenu .ivu-menu-item {
         padding-left: 16px !important;
+    }
+    #control-panel-cav-box {
+        width: 100%;
+        height: 100%;
     }
 </style>

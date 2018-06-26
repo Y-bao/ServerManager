@@ -1,17 +1,12 @@
 <template>
     <div class="cev-layout" v-bar>
-        <div style="height: 2000px; background:#0f0;"></div>
+        <Card></Card>
     </div>
 </template>
 
 <script>
-import { Card, Breadcrumb, BreadcrumbItem } from "iview";
 export default {
-    components: {
-        Card,
-        Breadcrumb,
-        BreadcrumbItem
-    },
+    name:"Visit",
     data() {
         return {};
     },

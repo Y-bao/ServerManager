@@ -1,24 +1,161 @@
 <template>
     <div class="cev-layout" v-bar>
-        <div style="height: 2000px; background:#0f0;"></div>
+        <Card class="cev-box">
+            <Breadcrumb>
+                <BreadcrumbItem>用户管理</BreadcrumbItem>
+            </Breadcrumb>
+            <div class="main-list">
+                <Table class="table" border :columns="columns" :data="data" @on-sort-change="onSortChange"></Table>
+                <Page class="page" :total="100" show-sizer show-elevator show-total></Page>
+            </div>
+        </Card>
     </div>
 </template>
 
 <script>
-import { Card, Breadcrumb, BreadcrumbItem } from "iview";
 export default {
-    components: {
-        Card,
-        Breadcrumb,
-        BreadcrumbItem
-    },
+    name: "Users",
     data() {
-        return {};
+        return {
+            columns: [
+                {
+                    title: "用户名",
+                    key: "name",
+                    minWidth: 150
+                },
+                {
+                    title: "性别",
+                    key: "gender",
+                    sortable: "custom",
+                    minWidth: 150
+                },
+                {
+                    title: "注册时间",
+                    key: "regDate",
+                    sortable: "custom",
+                    minWidth: 150
+                },
+                {
+                    title: "最后登录时间",
+                    key: "lastLoginDate",
+                    sortable: "custom",
+                    minWidth: 150
+                },
+                {
+                    title: "最后登录方式",
+                    key: "lastLoginWay",
+                    align: "center",
+                    minWidth: 150
+                },
+                {
+                    title: "操作",
+                    key: "action",
+                    align: "center",
+                    width: 100,
+                    fixed: "right",
+                    render: (h) => {
+                        return h("div", [
+                            h("Button", {
+                                props: {
+                                    type: "primary",
+                                    size: "small"
+                                },
+                                on: {
+                                    click: () => {
+                                    }
+                                }
+                            }, "查看详情")
+                        ]);
+                    }
+                }
+            ],
+            data: [
+                {
+                    name: "John Brown",
+                    age: 18,
+                    address: "New York No. 1 Lake Park",
+                    date: "2016-10-03"
+                },
+                {
+                    name: "Jim Green",
+                    age: 24,
+                    address: "London No. 1 Lake Park",
+                    date: "2016-10-01"
+                },
+                {
+                    name: "Joe Black",
+                    age: 30,
+                    address: "Sydney No. 1 Lake Park",
+                    date: "2016-10-02"
+                },
+                {
+                    name: "Jon Snow",
+                    age: 26,
+                    address: "Ottawa No. 2 Lake Park",
+                    date: "2016-10-04"
+                },
+                {
+                    name: "Jon Snow",
+                    age: 26,
+                    address: "Ottawa No. 2 Lake Park",
+                    date: "2016-10-04"
+                },
+                {
+                    name: "Jon Snow",
+                    age: 26,
+                    address: "Ottawa No. 2 Lake Park",
+                    date: "2016-10-04"
+                },
+                {
+                    name: "Jon Snow",
+                    age: 26,
+                    address: "Ottawa No. 2 Lake Park",
+                    date: "2016-10-04"
+                },
+                {
+                    name: "Jon Snow",
+                    age: 26,
+                    address: "Ottawa No. 2 Lake Park",
+                    date: "2016-10-04"
+                },
+                {
+                    name: "Jon Snow",
+                    age: 26,
+                    address: "Ottawa No. 2 Lake Park",
+                    date: "2016-10-04"
+                },
+                {
+                    name: "Jon Snow",
+                    age: 26,
+                    address: "Ottawa No. 2 Lake Park",
+                    date: "2016-10-04"
+                },
+                {
+                    name: "Jon Snow",
+                    age: 26,
+                    address: "Ottawa No. 2 Lake Park",
+                    date: "2016-10-04"
+                },
+                {
+                    name: "Jon Snow",
+                    age: 26,
+                    address: "Ottawa No. 2 Lake Park",
+                    date: "2016-10-04"
+                }
+            ],
+        };
     },
-    mounted() {}
+    methods: {
+        onSortChange(e) {
+            alert(e.key + "|" + e.order);
+        }
+    }
 };
 </script>
 
 <style scoped>
-
+    .cev-layout {
+        box-sizing: border-box;
+        padding: 10px;
+    }
 </style>

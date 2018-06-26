@@ -28,6 +28,3 @@ new Vue({
     },
     template: "<App/>"
 });
-
-
-import  "./models/model-config";

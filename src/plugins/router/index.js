@@ -14,10 +14,10 @@ const MainAnim = {
 };
 
 const CPChridAnim = {
-    openEnter: { name: "pm-sl-f-enter", active: "t-top" },
-    openLeave: { name: "pm-sl-f-leave", active: "t-bottom" },
-    closeEnter: { name: "pm-sl-f-enter", active: "t-top" },
-    closeLeave: { name: "pm-sl-f-leave", active: "t-bottom" }
+    openEnter: { name: "pm-sr-f-enter", active: "t-top" },
+    openLeave: { name: "pm-sr-f-leave", active: "t-bottom" },
+    closeEnter: { name: "pm-sr-f-enter", active: "t-top" },
+    closeLeave: { name: "pm-sr-f-leave", active: "t-bottom" }
 };
 const PChridAnim = {
     openEnter: "pm-none-enter",
