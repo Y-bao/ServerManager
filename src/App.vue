@@ -4,7 +4,16 @@
             <a class="main-logo">INNOVATION</a>
             <template v-if="isLogin">
                 <div class="main-shortcut">
-                    <input ref="inputShortcut" @blur="change(false)" @focus="change(true)" :class="['input' ,{'focus':focus}]" />
+                    <AutoComplete ref="inputShortcut" placeholder="input here" style="width:200px" @blur="change(false)" @focus="change(true)" :class="['input' ,{'focus':focus}]">
+                        <div class="demo-auto-complete-item" v-for="item in data4" :key="item.title">
+                            <div class="demo-auto-complete-group">
+                                <span>{{ item.title }}</span>
+                            </div>
+                            <Option v-for="option in item.children" :value="option.title" :key="option.title">
+                                <span class="demo-auto-complete-title">{{ option.title }}</span>
+                            </Option>
+                        </div>
+                    </AutoComplete>
                     <i class="btn iconfont icon-search" @click="onSearch" />
                 </div>
                 <Menu class="main-menu" mode="horizontal" :active-name="matchedRoute" @on-select="onMenuSelect">
@@ -38,7 +47,49 @@ export default {
     data() {
         return {
             tC: {},
-            focus: false
+            focus: false, value4: "",
+            data4: [
+                {
+                    title: "话题",
+                    children: [
+                        {
+                            title: "iView",
+                            count: 10000,
+
+                        },
+                        {
+                            title: "iView UI",
+                            count: 10600,
+
+                        }
+                    ]
+                },
+                {
+                    title: "问题",
+                    children: [
+                        {
+                            title: "iView UI 有多好",
+                            count: 60100,
+
+                        },
+                        {
+                            title: "iView 是啥",
+                            count: 30010,
+
+                        }
+                    ]
+                },
+                {
+                    title: "文章",
+                    children: [
+                        {
+                            title: "iView 是一个设计语言",
+                            count: 100000,
+
+                        }
+                    ]
+                }
+            ]
         };
     },
     computed: {
@@ -160,5 +211,34 @@ export default {
 
     .main-menu-btn i {
         transition: transform 0.4s;
+    }
+    .demo-auto-complete-item {
+        padding: 4px 0;
+        border-bottom: 1px solid #f6f6f6;
+    }
+    .demo-auto-complete-item:last-child {
+        border-bottom: none;
+    }
+    .demo-auto-complete-group {
+        font-size: 12px;
+        padding: 4px 6px;
+    }
+    .demo-auto-complete-group span {
+        color: #666;
+        font-weight: bold;
+    }
+    .demo-auto-complete-group a {
+        float: right;
+    }
+    .demo-auto-complete-count {
+        float: right;
+        color: #999;
+    }
+    .demo-auto-complete-more {
+        display: block;
+        margin: 0 auto;
+        padding: 4px;
+        text-align: center;
+        font-size: 12px;
     }
 </style>

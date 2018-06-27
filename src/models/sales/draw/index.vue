@@ -1,11 +1,15 @@
 <template>
     <div class="cev-layout" v-bar>
         <Card>
-            <Breadcrumb>
-                <BreadcrumbItem>抽签活动</BreadcrumbItem>
-            </Breadcrumb>
+            <div class="toolbar">
+                <Breadcrumb class="breadcrumb">
+                    <BreadcrumbItem>抽签活动</BreadcrumbItem>
+                </Breadcrumb>
+                <Button class="button" type="primary">新建活动</Button>
+                <Button class="button" type="primary">活动信息</Button>
+            </div>
             <div class="main-list">
-                <Table class="table" border :columns="columns6" :data="data5"></Table>
+                <Table class="table" border :columns="columns" :data="data"></Table>
                 <Page class="page" :total="100" show-sizer show-elevator show-total></Page>
             </div>
         </Card>
@@ -17,7 +21,7 @@ export default {
     name: "Draw",
     data() {
         return {
-            columns6: [
+            columns: [
                 {
                     title: "Date",
                     key: "date"
@@ -70,7 +74,7 @@ export default {
                     }
                 }
             ],
-            data5: [
+            data: [
                 {
                     name: "John Brown",
                     age: 18,

@@ -1,9 +1,13 @@
 <template>
     <div class="cev-layout" v-bar>
         <Card class="cev-box">
-            <Breadcrumb>
-                <BreadcrumbItem>用户管理</BreadcrumbItem>
-            </Breadcrumb>
+            <div class="toolbar">
+                <Breadcrumb class="breadcrumb">
+                    <BreadcrumbItem>用户管理</BreadcrumbItem>
+                </Breadcrumb>
+                <Button class="button" type="primary">导出</Button>
+                <Button class="button" type="primary">统计</Button>
+            </div>
             <div class="main-list">
                 <Table class="table" border :columns="columns" :data="data" @on-sort-change="onSortChange"></Table>
                 <Page class="page" :total="100" show-sizer show-elevator show-total></Page>
